@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DYANGOX</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+<!-- =========================
+     BACKGROUND
+========================= -->
+
+<div class="background-orb orb-one"></div>
+<div class="background-orb orb-two"></div>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="brand" onclick="showPatient()">
+        <div class="brand-icon">
+            <span>+</span>
+        </div>
+
+        <div>
+            <h2>DYANOX <span>AI</span></h2>
+            <p>Intelligent Healthcare</p>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <div class="system-status">
+            <span class="status-dot"></span>
+            AI System Online
+        </div>
+    </div>
+
+    <div class="role-switch">
+
+        <button id="patientBtn"
+                class="role-btn active"
+                onclick="showPatient()">
+            <span>👤</span>
+            Patient
+        </button>
+
+        <button id="doctorBtn"
+                class="role-btn"
+                onclick="showDoctor()">
+            <span>🩺</span>
+            Doctor
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+<!-- =========================
+     PATIENT PORTAL
+========================= -->
+
+<section id="patientFlow" class="portal">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                <span class="spark">✦</span>
+                AI-POWERED HEALTHCARE
+            </div>
+
+            <h1>
+                Healthcare that
+                <span>listens.</span>
+            </h1>
+
+            <p>
+                Tell us what you're experiencing. CareFlow AI
+                guides you through a simple assessment and
+                prepares a clear summary for your doctor.
+            </p>
+
+            <div class="hero-stats">
+
+                <div>
+                    <strong>24/7</strong>
+                    <small>AI Assistance</small>
+                </div>
+
+                <div>
+                    <strong>2</strong>
+                    <small>Languages</small>
+                </div>
+
+                <div>
+                    <strong>100%</strong>
+                    <small>Digital</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+
+            <div class="ai-orbit">
+
+                <div class="orbit-ring ring-one"></div>
+                <div class="orbit-ring ring-two"></div>
+
+                <div class="ai-core">
+                    <span>✦</span>
+                </div>
+
+                <div class="floating-chip chip-one">
+                    <span>✓</span>
+                    Smart Assessment
+                </div>
+
+                <div class="floating-chip chip-two">
+                    <span>◉</span>
+                    Voice Enabled
+                </div>
+
+                <div class="floating-chip chip-three">
+                    <span>↗</span>
+                    Doctor Ready
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PATIENT PANEL -->
+
+    <div class="patient-wrapper">
+
+        <!-- PROGRESS -->
+
+        <div class="progress-header">
+
+            <div>
+                <span class="section-label">PATIENT ASSESSMENT</span>
+                <h2 id="patientTitle">Let's understand how you're feeling.</h2>
+                <p id="patientSubtitle">
+                    Tell us what you're experiencing.
+                </p>
+            </div>
+
+            <div class="step-counter">
+                <strong id="stepText">Step 1</strong>
+                <span>of 7</span>
+            </div>
+
+        </div>
+
+
+        <div class="progress-line">
+
+            <div class="progress-item active">
+                <span>01</span>
+                <small>Start</small>
+            </div>
+
+            <div class="progress-item">
+                <span>02</span>
+                <small>Symptoms</small>
+            </div>
+
+            <div class="progress-item">
+                <span>03</span>
+                <small>Questions</small>
+            </div>
+
+            <div class="progress-item">
+                <span>04</span>
+                <small>History</small>
+            </div>
+
+            <div class="progress-item">
+                <span>05</span>
+                <small>Reports</small>
+            </div>
+
+            <div class="progress-item">
+                <span>06</span>
+                <small>Assessment</small>
+            </div>
+
+            <div class="progress-item">
+                <span>07</span>
+                <small>Complete</small>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 1
+        ========================= -->
+
+        <div class="patient-screen active" id="step1">
+
+            <div class="welcome-card">
+
+                <div class="welcome-icon">
+                    ✦
+                </div>
+
+                <div>
+
+                    <span class="mini-label">HOW CAN WE HELP?</span>
+
+                    <h3>What brings you here today?</h3>
+
+                    <p>
+                        Choose an option below to begin your
+                        CareFlow assessment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="choice-grid">
+
+                <button class="choice-card"
+                        onclick="nextStep(2)">
+
+                    <div class="choice-icon blue">
+                        🩺
+                    </div>
+
+                    <div class="choice-content">
+                        <h3>I have a health problem</h3>
+
+                        <p>
+                            Tell our AI about your current
+                            symptoms and concerns.
+                        </p>
+
+                        <span class="choice-arrow">→</span>
+                    </div>
+
+                </button>
+
+
+                <button class="choice-card secondary"
+                        onclick="showPreviousVisit()">
+
+                    <div class="choice-icon purple">
+                        ◴
+                    </div>
+
+                    <div class="choice-content">
+                        <h3>View previous visit</h3>
+
+                        <p>
+                            Access a previous CareFlow
+                            assessment using your patient ID.
+                        </p>
+
+                        <span class="choice-arrow">→</span>
+                    </div>
+
+                </button>
+
+            </div>
+
+
+            <div class="privacy-note">
+                <span>🔒</span>
+                Your information is handled securely for
+                assessment purposes.
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 2
+        ========================= -->
+
+        <div class="patient-screen" id="step2">
+
+            <div class="question-layout">
+
+                <div class="question-side">
+
+                    <div class="ai-avatar">
+                        ✦
+                    </div>
+
+                    <span class="ai-label">CARE AI</span>
+
+                    <h3>
+                        What symptoms are
+                        you experiencing?
+                    </h3>
+
+                    <p>
+                        You can type your symptoms or
+                        use your voice.
+                    </p>
+
+                    <div class="language-switch">
+
+                        <button class="language active"
+                                onclick="setLanguage('English', this)">
+                            English
+                        </button>
+
+                        <button class="language"
+                                onclick="setLanguage('Hindi', this)">
+                            हिंदी
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="question-card">
+
+                    <div class="input-header">
+                        <span>YOUR SYMPTOMS</span>
+
+                        <span class="recording-status"
+                              id="voiceStatus">
+                            Voice ready
+                        </span>
+                    </div>
+
+                    <textarea
+                        id="symptomsInput"
+                        placeholder="Example: I have headache, mild fever and weakness since three days..."></textarea>
+
+
+                    <div class="input-actions">
+
+                        <button class="voice-btn"
+                                onclick="startVoice()">
+                            <span class="mic-icon">🎙</span>
+                            <span id="voiceText">Speak</span>
+                        </button>
+
+                        <span class="input-hint">
+                            You can describe multiple symptoms.
+                        </span>
+
+                    </div>
+
+
+                    <button class="primary-btn full"
+                            onclick="saveSymptoms()">
+                        Continue
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 3
+        ========================= -->
+
+        <div class="patient-screen" id="step3">
+
+            <div class="ai-question-header">
+
+                <div class="ai-avatar large">
+                    ✦
+                </div>
+
+                <div>
+                    <span class="ai-label">CARE AI</span>
+                    <h3 id="dynamicQuestion">
+                        How long have you been experiencing these symptoms?
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="answer-grid">
+
+                <button onclick="selectDuration('Less than 1 day', this)">
+                    <span>01</span>
+                    Less than 1 day
+                </button>
+
+                <button onclick="selectDuration('1–3 days', this)">
+                    <span>02</span>
+                    1–3 days
+                </button>
+
+                <button onclick="selectDuration('4–7 days', this)">
+                    <span>03</span>
+                    4–7 days
+                </button>
+
+                <button onclick="selectDuration('More than a week', this)">
+                    <span>04</span>
+                    More than a week
+                </button>
+
+            </div>
+
+
+            <div class="question-card compact">
+
+                <label>
+                    Anything else you'd like the AI to know?
+                </label>
+
+                <div class="inline-input">
+
+                    <input
+                        id="additionalInfo"
+                        type="text"
+                        placeholder="Optional additional information">
+
+                    <button onclick="startVoice()">
+                        🎙
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button class="primary-btn"
+                    onclick="saveQuestion()">
+                Continue
+                <span>→</span>
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 4
+        ========================= -->
+
+        <div class="patient-screen" id="step4">
+
+            <div class="history-layout">
+
+                <div class="history-intro">
+
+                    <div class="section-number">
+                        04
+                    </div>
+
+                    <span class="section-label">
+                        MEDICAL HISTORY
+                    </span>
+
+                    <h3>
+                        Help us understand
+                        your background.
+                    </h3>
+
+                    <p>
+                        Previous conditions, medications,
+                        allergies or surgeries can help
+                        the doctor understand your case better.
+                    </p>
+
+                </div>
+
+
+                <div class="history-form">
+
+                    <div class="field-group">
+
+                        <label>Existing medical conditions</label>
+
+                        <textarea
+                            id="historyInput"
+                            placeholder="Example: Asthma, diabetes, thyroid condition, none..."></textarea>
+
+                    </div>
+
+
+                    <div class="field-row">
+
+                        <div class="field-group">
+
+                            <label>Current medications</label>
+
+                            <input
+                                id="medicationsInput"
+                                type="text"
+                                placeholder="Enter medications">
+
+                        </div>
+
+                        <div class="field-group">
+
+                            <label>Known allergies</label>
+
+                            <input
+                                id="allergiesInput"
+                                type="text"
+                                placeholder="Enter allergies">
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="primary-btn"
+                            onclick="saveHistory()">
+                        Continue
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 5 REPORTS
+        ========================= -->
+
+        <div class="patient-screen" id="step5">
+
+            <div class="reports-header">
+
+                <div>
+
+                    <span class="section-label">
+                        SUPPORTING DOCUMENTS
+                    </span>
+
+                    <h3>Upload previous reports</h3>
+
+                    <p>
+                        Add relevant medical reports,
+                        prescriptions or test results.
+                        This helps your doctor get the full picture.
+                    </p>
+
+                </div>
+
+                <div class="optional-badge">
+                    OPTIONAL
+                </div>
+
+            </div>
+
+
+            <div class="upload-zone"
+                 id="uploadZone">
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <h4>Drop your files here</h4>
+
+                <p>
+                    or choose files from your device
+                </p>
+
+                <label class="upload-btn">
+
+                    Browse files
+
+                    <input
+                        id="reportInput"
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+
+                </label>
+
+                <small>
+                    PDF, JPG, PNG, DOC up to 10MB each
+                </small>
+
+            </div>
+
+
+            <div id="fileList"
+                 class="file-list">
+            </div>
+
+
+            <div class="report-actions">
+
+                <button class="secondary-btn"
+                        onclick="skipReports()">
+                    Skip for now
+                </button>
+
+                <button class="primary-btn"
+                        onclick="saveReports()">
+                    Continue
+                    <span>→</span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 6 ASSESSMENT
+        ========================= -->
+
+        <div class="patient-screen" id="step6">
+
+            <div class="assessment-header">
+
+                <div>
+
+                    <span class="section-label">
+                        AI ASSESSMENT
+                    </span>
+
+                    <h3>Your preliminary assessment</h3>
+
+                    <p>
+                        Review the information before
+                        generating your patient ID.
+                    </p>
+
+                </div>
+
+                <div class="ai-confidence">
+                    <span></span>
+                    AI ANALYSIS COMPLETE
+                </div>
+
+            </div>
+
+
+            <div class="assessment-grid">
+
+                <div class="assessment-card">
+
+                    <div class="card-heading">
+                        <span>SYMPTOMS</span>
+                        <span>✓</span>
+                    </div>
+
+                    
+
+                     <div id="assessmentSymptoms" class="symptom-list">
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="assessment-card priority-card">
+
+                    <div class="card-heading">
+                        <span>PRELIMINARY PRIORITY</span>
+                    </div>
+
+                    <div class="priority-display">
+
+                        <div class="priority-dot medium"></div>
+
+                        <div>
+                            <strong>MEDIUM</strong>
+                            <p>Routine medical review recommended.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="assessment-note">
+
+                <span>✦</span>
+
+                <div>
+
+                    <strong>Important</strong>
+
+                    <p>
+                        This is an AI-generated preliminary
+                        assessment and is not a medical diagnosis.
+                        A healthcare professional should make the
+                        final clinical decision.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button class="primary-btn"
+                    onclick="generatePatientID()">
+                Confirm & Generate Patient ID
+                <span>→</span>
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             STEP 7 SUCCESS
+        ========================= -->
+
+        <div class="patient-screen" id="step7">
+
+            <div class="success-screen">
+
+                <div class="success-circle">
+                    ✓
+                </div>
+
+                <span class="section-label">
+                    ASSESSMENT COMPLETE
+                </span>
+
+                <h2>Your CareFlow ID is ready.</h2>
+
+                <p>
+                    Please save this ID. Your doctor can use it
+                    to securely access your assessment.
+                </p>
+
+
+                <div class="patient-id-card">
+
+                    <span>YOUR PATIENT ID</span>
+
+                    <strong id="generatedID">
+                        CF-2026-48291
+                    </strong>
+
+                    <button onclick="copyPatientID()">
+                        Copy ID
+                    </button>
+
+                </div>
+
+
+                <div class="success-actions">
+
+                    <button class="primary-btn"
+                            onclick="showDoctor()">
+                        Open Doctor Portal
+                        <span>→</span>
+                    </button>
+
+                    <button class="secondary-btn"
+                            onclick="resetAssessment()">
+                        Start New Assessment
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     DOCTOR PORTAL
+========================= -->
+
+<section id="doctorFlow"
+         class="portal doctor-portal hidden">
+
+    <div class="doctor-hero">
+
+        <div>
+
+            <div class="eyebrow">
+                <span>✦</span>
+                CLINICAL WORKSPACE
+            </div>
+
+            <h1>
+                Doctor
+                <span>Dashboard</span>
+            </h1>
+
+            <p>
+                Access structured patient information,
+                uploaded reports and AI-generated summaries.
+            </p>
+
+        </div>
+
+        <div class="doctor-status">
+            <span></span>
+            Secure workspace
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="patient-search">
+
+        <div class="search-icon">
+            ⌕
+        </div>
+
+        <div class="search-field">
+
+            <label>SEARCH PATIENT</label>
+
+            <input
+                id="patientID"
+                type="text"
+                placeholder="Enter Patient ID — e.g. CF-2026-48291">
+
+        </div>
+
+        <button class="primary-btn"
+                onclick="loadPatient()">
+            Search Patient
+            <span>→</span>
+        </button>
+
+    </div>
+
+
+    <!-- EMPTY STATE -->
+
+    <div id="doctorEmpty"
+         class="doctor-empty">
+
+        <div class="empty-icon">
+            ⌕
+        </div>
+
+        <h3>Search for a patient</h3>
+
+        <p>
+            Enter a CareFlow Patient ID to view
+            the complete assessment.
+        </p>
+
+        <div class="demo-hint">
+            Demo ID:
+            <strong>CF-2026-48291</strong>
+        </div>
+
+    </div>
+
+
+    <!-- RECORD -->
+
+    <div id="doctorRecord"
+         class="doctor-record hidden">
+
+
+        <!-- PATIENT HEADER -->
+
+        <div class="patient-record-header">
+
+            <div class="patient-profile">
+
+                <div class="patient-avatar">
+                    👤
+                </div>
+
+                <div>
+
+                    <span>PATIENT RECORD</span>
+
+                    <h2 id="doctorPatientName">
+                        Patient
+                    </h2>
+
+                    <p>
+                        ID:
+                        <strong id="doctorPatientID">
+                            CF-2026-48291
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="priority-badge medium">
+                <span></span>
+                MEDIUM PRIORITY
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY GRID -->
+
+        <div class="doctor-grid">
+
+
+            <!-- SYMPTOMS -->
+
+            <div class="doctor-card wide">
+
+                <div class="doctor-card-header">
+
+                    <div>
+                        <span class="card-kicker">
+                            01 · PRESENTING CONCERNS
+                        </span>
+
+                        <h3>Symptoms</h3>
+                    </div>
+
+                    <span class="card-icon">🩺</span>
+
+                </div>
+
+                <div id="doctorSymptoms"
+                     class="doctor-symptoms">
+                </div>
+
+            </div>
+
+
+            <!-- HISTORY -->
+
+            <div class="doctor-card">
+
+                <div class="doctor-card-header">
+
+                    <div>
+                        <span class="card-kicker">
+                            02 · BACKGROUND
+                        </span>
+
+                        <h3>Medical History</h3>
+                    </div>
+
+                </div>
+
+                <div id="doctorHistory"
+                     class="history-result">
+                    No history provided.
+                </div>
+
+            </div>
+
+
+            <!-- REPORTS -->
+
+            <div class="doctor-card">
+
+                <div class="doctor-card-header">
+
+                    <div>
+                        <span class="card-kicker">
+                            03 · DOCUMENTS
+                        </span>
+
+                        <h3>Uploaded Reports</h3>
+                    </div>
+
+                    <span class="report-count"
+                          id="reportCount">
+                        0
+                    </span>
+
+                </div>
+
+                <div id="doctorReports"
+                     class="doctor-reports">
+                </div>
+
+            </div>
+
+
+            <!-- AI SUMMARY -->
+
+            <div class="doctor-card ai-summary-card wide">
+
+                <div class="doctor-card-header">
+
+                    <div>
+
+                        <span class="card-kicker">
+                            04 · CARE AI
+                        </span>
+
+                        <h3>AI-generated assessment summary</h3>
+
+                    </div>
+
+                    <div class="ai-mini">
+                        ✦ AI
+                    </div>
+
+                </div>
+
+                <div id="aiSummary"
+                     class="ai-summary">
+                </div>
+
+                <div class="ai-disclaimer">
+                    AI output is intended to support clinical
+                    review and does not replace professional judgment.
+                </div>
+
+            </div>
+
+
+            <!-- FINAL DECISION -->
+
+            <div class="doctor-card decision-card wide">
+
+                <div class="doctor-card-header">
+
+                    <div>
+
+                        <span class="card-kicker">
+                            05 · CLINICAL REVIEW
+                        </span>
+
+                        <h3>Doctor's final decision</h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="decision-options">
+
+                    <button class="decision-option"
+                            onclick="selectDecision('Routine consultation', this)">
+                        <span>✓</span>
+                        Routine consultation
+                    </button>
+
+                    <button class="decision-option"
+                            onclick="selectDecision('Priority consultation', this)">
+                        <span>!</span>
+                        Priority consultation
+                    </button>
+
+                    <button class="decision-option"
+                            onclick="selectDecision('Urgent attention', this)">
+                        <span>⚠</span>
+                        Urgent attention
+                    </button>
+
+                </div>
+
+
+                <textarea
+                    id="doctorNotes"
+                    placeholder="Add clinical notes or recommendations..."></textarea>
+
+
+                <div class="decision-footer">
+
+                    <span id="selectedDecision">
+                        No decision selected
+                    </span>
+
+                    <button class="primary-btn"
+                            onclick="saveDecision()">
+                        Save Clinical Decision
+                        <span>✓</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div id="message"
+     class="toast">
+
+    <span>✓</span>
+
+    <p>Message</p>
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div>
+        <strong>CareFlow AI</strong>
+        <span>Intelligent healthcare workflow.</span>
+    </div>
+
+    <span>
+        Frontend Prototype · © 2026
+    </span>
+
+</footer>
+
+
+<script src="main.js"></script>
+
+</body>
+</html>
