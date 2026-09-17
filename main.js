@@ -1,6 +1,12 @@
 
 
+
 let currentStep = 1;
+
+
+/* =========================================================
+   PATIENT DATA
+========================================================= */
 
 let patientData = {
 
@@ -18,16 +24,25 @@ let patientData = {
 
     reports: [],
 
-    priority: "MEDIUM",
+    priority: "NORMAL",
 
-    patientID: ""
+    patientID: "",
+
+    doctorDecision: ""
 
 };
 
 
-/* =========================================
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+let currentLanguage = "English";
+
+
+/* =========================================================
    PATIENT / DOCTOR SWITCH
-========================================= */
+========================================================= */
 
 function showPatient() {
 
@@ -44,13 +59,23 @@ function showPatient() {
         document.getElementById("doctorBtn");
 
 
+    if (!patientFlow || !doctorFlow) return;
+
+
     patientFlow.classList.remove("hidden");
 
     doctorFlow.classList.add("hidden");
 
-    patientBtn.classList.add("active");
 
-    doctorBtn.classList.remove("active");
+    if (patientBtn) {
+        patientBtn.classList.add("active");
+    }
+
+
+    if (doctorBtn) {
+        doctorBtn.classList.remove("active");
+    }
+
 
     window.scrollTo({
         top: 0,
@@ -58,6 +83,10 @@ function showPatient() {
     });
 }
 
+
+/* =========================================================
+   SHOW DOCTOR
+========================================================= */
 
 function showDoctor() {
 
@@ -74,13 +103,23 @@ function showDoctor() {
         document.getElementById("doctorBtn");
 
 
+    if (!patientFlow || !doctorFlow) return;
+
+
     patientFlow.classList.add("hidden");
 
     doctorFlow.classList.remove("hidden");
 
-    patientBtn.classList.remove("active");
 
-    doctorBtn.classList.add("active");
+    if (patientBtn) {
+        patientBtn.classList.remove("active");
+    }
+
+
+    if (doctorBtn) {
+        doctorBtn.classList.add("active");
+    }
+
 
     window.scrollTo({
         top: 0,
@@ -89,226 +128,357 @@ function showDoctor() {
 }
 
 
-/* =========================================
+/* =========================================================
    PATIENT STEP NAVIGATION
-========================================= */
+========================================================= */
+
 function nextStep(step) {
 
     currentStep = step;
 
-    const screens =
-        document.querySelectorAll(".patient-screen");
 
-    screens.forEach(function(screen) {
-        screen.classList.remove("active");
-    });
+    const screens =
+        document.querySelectorAll(
+            ".patient-screen"
+        );
+
+
+    screens.forEach(
+        function(screen) {
+
+            screen.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
 
     const target =
-        document.getElementById("step" + step);
+        document.getElementById(
+            "step" + step
+        );
+
 
     if (target) {
-        target.classList.add("active");
+
+        target.classList.add(
+            "active"
+        );
+
     }
+
 
     updateProgress(step);
+
     updateStepText(step);
+
     updatePatientSubtitle(step);
 
-    /* =====================================
-       GENERATE LIVE ASSESSMENT
-    ===================================== */
+
+    /* Generate assessment when Step 6 opens */
 
     if (step === 6) {
+
         renderAssessment();
+
     }
 
+
     window.scrollTo({
+
         top:
-            document.querySelector(".patient-wrapper").offsetTop - 100,
+            document.querySelector(
+                ".patient-wrapper"
+            )
+            ? document.querySelector(
+                ".patient-wrapper"
+              ).offsetTop - 100
+            : 0,
+
         behavior: "smooth"
+
     });
 }
 
 
-
-/* =========================================
+/* =========================================================
    PROGRESS
-========================================= */
+========================================================= */
 
 function updateProgress(step) {
 
     const progressItems =
-        document.querySelectorAll(".progress-item");
+        document.querySelectorAll(
+            ".progress-item"
+        );
 
 
-    progressItems.forEach(function(item, index) {
+    progressItems.forEach(
+        function(item, index) {
 
-        const itemStep = index + 1;
+            const itemStep =
+                index + 1;
 
-        if (itemStep <= step) {
 
-            item.classList.add("active");
+            if (itemStep <= step) {
 
-        } else {
+                item.classList.add(
+                    "active"
+                );
 
-            item.classList.remove("active");
+            } else {
+
+                item.classList.remove(
+                    "active"
+                );
+
+            }
 
         }
-
-    });
-
+    );
 }
 
+
+/* =========================================================
+   STEP TEXT
+========================================================= */
 
 function updateStepText(step) {
 
     const stepText =
-        document.getElementById("stepText");
+        document.getElementById(
+            "stepText"
+        );
 
-    stepText.innerText =
-        "Step " + step;
 
+    if (stepText) {
+
+        stepText.innerText =
+            "Step " +
+            step +
+            " of 7";
+
+    }
 }
 
+
+/* =========================================================
+   PATIENT SUBTITLE
+========================================================= */
 
 function updatePatientSubtitle(step) {
 
     const subtitle =
-        document.getElementById("patientSubtitle");
+        document.getElementById(
+            "patientSubtitle"
+        );
+
 
     const title =
-        document.getElementById("patientTitle");
+        document.getElementById(
+            "patientTitle"
+        );
 
 
     const content = {
 
+
         1: {
-            title: "Let's understand how you're feeling.",
-            subtitle: "Tell us what you're experiencing."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "आइए समझते हैं कि आप कैसा महसूस कर रहे हैं।"
+                    : "Let's understand how you're feeling.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "हमें बताएं कि आपको क्या परेशानी हो रही है।"
+                    : "Tell us what you're experiencing."
+
         },
+
 
         2: {
-            title: "Tell Care AI what you're experiencing.",
-            subtitle: "Describe your symptoms using text or voice."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "आपको क्या परेशानी हो रही है?"
+                    : "Tell Care AI what you're experiencing.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "अपने लक्षण लिखें या आवाज़ से बताएं।"
+                    : "Describe your symptoms using text or voice."
+
         },
+
 
         3: {
-            title: "A few quick questions.",
-            subtitle: "Your answers help structure the assessment."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "कुछ छोटे सवाल।"
+                    : "A few quick questions.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "आपके जवाब assessment को बेहतर बनाने में मदद करेंगे।"
+                    : "Your answers help structure the assessment."
+
         },
+
 
         4: {
-            title: "Your medical background matters.",
-            subtitle: "Add relevant medical history."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "आपकी मेडिकल हिस्ट्री महत्वपूर्ण है।"
+                    : "Your medical background matters.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "अपनी मेडिकल हिस्ट्री जोड़ें।"
+                    : "Add relevant medical history."
+
         },
+
 
         5: {
-            title: "Add supporting reports.",
-            subtitle: "Upload previous medical documents if available."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "पुरानी मेडिकल रिपोर्ट जोड़ें।"
+                    : "Add supporting reports.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "अगर उपलब्ध हों तो अपनी पुरानी रिपोर्ट अपलोड करें।"
+                    : "Upload previous medical documents if available."
+
         },
+
 
         6: {
-            title: "Review your assessment.",
-            subtitle: "Check the information before generating your ID."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "अपना assessment देखें।"
+                    : "Review your assessment.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "Patient ID बनाने से पहले जानकारी जांचें।"
+                    : "Check the information before generating your ID."
+
         },
 
+
         7: {
-            title: "Assessment successfully completed.",
-            subtitle: "Your unique CareFlow patient ID is ready."
+
+            title:
+                currentLanguage === "Hindi"
+                    ? "Assessment पूरा हो गया।"
+                    : "Assessment successfully completed.",
+
+            subtitle:
+                currentLanguage === "Hindi"
+                    ? "आपका unique CareFlow Patient ID तैयार है।"
+                    : "Your unique CareFlow patient ID is ready."
 
         }
 
     };
 
 
-    if (content[step]) {
+    if (!content[step]) return;
+
+
+    if (title) {
 
         title.innerText =
             content[step].title;
+
+    }
+
+
+    if (subtitle) {
 
         subtitle.innerText =
             content[step].subtitle;
 
     }
-
 }
 
 
-/* =========================================
-   STEP 2 — SYMPTOMS
-========================================= */
-
-function saveSymptoms() {
-
-    const input =
-        document.getElementById("symptomsInput");
-
-    const symptoms =
-        input.value.trim();
-
-
-    if (!symptoms) {
-
-        showMessage(
-            "Please describe at least one symptom."
-        );
-
-        input.focus();
-
-        return;
-    }
-
-
-    patientData.symptoms = symptoms;
-
-
-    showMessage(
-        "Symptoms recorded successfully."
-    );
-
-
-    nextStep(3);
-
-}
-
-
-/* =========================================
-   LANGUAGE
-========================================= */
+/* =========================================================
+   LANGUAGE SWITCH
+========================================================= */
 
 function setLanguage(language, button) {
 
+    currentLanguage =
+        language;
+
+
     const buttons =
-        document.querySelectorAll(".language");
-
-    buttons.forEach(function(btn) {
-
-        btn.classList.remove("active");
-
-    });
+        document.querySelectorAll(
+            ".language"
+        );
 
 
-    button.classList.add("active");
+    buttons.forEach(
+        function(btn) {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        }
+    );
 
 
-    if (language === "Hindi") {
+    if (button) {
 
-        document.getElementById("symptomsInput").placeholder =
-            "उदाहरण: मुझे तीन दिनों से सिरदर्द, हल्का बुखार और कमजोरी है...";
-
-    } else {
-
-        document.getElementById("symptomsInput").placeholder =
-            "Example: I have headache, mild fever and weakness since three days...";
+        button.classList.add(
+            "active"
+        );
 
     }
 
+
+    const symptomsInput =
+        document.getElementById(
+            "symptomsInput"
+        );
+
+
+    if (symptomsInput) {
+
+        if (language === "Hindi") {
+
+            symptomsInput.placeholder =
+                "उदाहरण: मुझे तीन दिनों से बुखार, सिरदर्द और कमजोरी है...";
+
+        } else {
+
+            symptomsInput.placeholder =
+                "Example: I have fever, headache and weakness since three days...";
+
+        }
+
+    }
+
+
+    updatePatientSubtitle(
+        currentStep
+    );
 }
 
 
-/* =========================================
+/* =========================================================
    VOICE INPUT
-========================================= */
+========================================================= */
 
 function startVoice() {
 
@@ -320,7 +490,9 @@ function startVoice() {
     if (!SpeechRecognition) {
 
         showMessage(
-            "Voice input is not supported in this browser."
+            currentLanguage === "Hindi"
+                ? "इस browser में voice input supported नहीं है।"
+                : "Voice input is not supported in this browser."
         );
 
         return;
@@ -331,30 +503,49 @@ function startVoice() {
         new SpeechRecognition();
 
 
-    recognition.lang =
-        "en-IN";
+    /*
+       Hindi + English support
+    */
+
+    if (currentLanguage === "Hindi") {
+
+        recognition.lang =
+            "hi-IN";
+
+    } else {
+
+        recognition.lang =
+            "en-IN";
+
+    }
+
 
     recognition.continuous =
         false;
+
 
     recognition.interimResults =
         false;
 
 
     const status =
-        document.getElementById("voiceStatus");
+        document.getElementById(
+            "voiceStatus"
+        );
+
 
     const voiceText =
-        document.getElementById("voiceText");
+        document.getElementById(
+            "voiceText"
+        );
 
 
     if (status) {
 
         status.innerText =
-            "Listening...";
-
-        status.style.color =
-            "#ffc857";
+            currentLanguage === "Hindi"
+                ? "सुन रहा हूँ..."
+                : "Listening...";
 
     }
 
@@ -362,38 +553,63 @@ function startVoice() {
     if (voiceText) {
 
         voiceText.innerText =
-            "Listening...";
+            currentLanguage === "Hindi"
+                ? "बोलें"
+                : "Speak";
 
     }
 
 
-    recognition.start();
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        showMessage(
+            currentLanguage === "Hindi"
+                ? "Voice recording शुरू नहीं हो सकी।"
+                : "Voice recording could not be started."
+        );
+
+        return;
+    }
 
 
     recognition.onresult =
         function(event) {
 
             const transcript =
-                event.results[0][0].transcript;
+                event.results[0][0]
+                    .transcript;
 
 
             const symptomsInput =
-                document.getElementById("symptomsInput");
+                document.getElementById(
+                    "symptomsInput"
+                );
 
 
             if (symptomsInput) {
 
                 symptomsInput.value +=
-                    (symptomsInput.value ? " " : "") +
+
+                    (
+                        symptomsInput.value
+                            ? " "
+                            : ""
+                    ) +
+
                     transcript;
 
             }
 
 
             showMessage(
-                "Voice captured successfully."
+                currentLanguage === "Hindi"
+                    ? "आवाज़ सफलतापूर्वक रिकॉर्ड हुई।"
+                    : "Voice captured successfully."
             );
-
         };
 
 
@@ -401,7 +617,9 @@ function startVoice() {
         function() {
 
             showMessage(
-                "Unable to capture voice. Please try again."
+                currentLanguage === "Hindi"
+                    ? "Voice capture नहीं हो पाया। फिर कोशिश करें।"
+                    : "Unable to capture voice. Please try again."
             );
 
         };
@@ -413,10 +631,9 @@ function startVoice() {
             if (status) {
 
                 status.innerText =
-                    "Voice ready";
-
-                status.style.color =
-                    "";
+                    currentLanguage === "Hindi"
+                        ? "Voice तैयार है"
+                        : "Voice ready";
 
             }
 
@@ -424,193 +641,324 @@ function startVoice() {
             if (voiceText) {
 
                 voiceText.innerText =
-                    "Speak";
+                    currentLanguage === "Hindi"
+                        ? "बोलें"
+                        : "Speak";
 
             }
 
         };
-
 }
 
 
-/* =========================================
-   STEP 3 — DURATION
-========================================= */
+/* =========================================================
+   SAVE SYMPTOMS
+========================================================= */
 
-function selectDuration(duration, button) {
+function saveSymptoms() {
+
+    const input =
+        document.getElementById(
+            "symptomsInput"
+        );
+
+
+    if (!input) return;
+
+
+    const symptoms =
+        input.value.trim();
+
+
+    if (!symptoms) {
+
+        showMessage(
+            currentLanguage === "Hindi"
+                ? "कृपया कम से कम एक symptom बताएं।"
+                : "Please describe at least one symptom."
+        );
+
+
+        input.focus();
+
+        return;
+    }
+
+
+    patientData.symptoms =
+        symptoms;
+
+
+    showMessage(
+        currentLanguage === "Hindi"
+            ? "Symptoms successfully record हो गए।"
+            : "Symptoms recorded successfully."
+    );
+
+
+    nextStep(3);
+}
+
+
+/* =========================================================
+   DURATION
+========================================================= */
+
+function selectDuration(
+    duration,
+    button
+) {
 
     const buttons =
-        document.querySelectorAll(".answer-grid button");
+        document.querySelectorAll(
+            ".answer-grid button"
+        );
 
 
-    buttons.forEach(function(btn) {
+    buttons.forEach(
+        function(btn) {
 
-        btn.classList.remove("selected");
+            btn.classList.remove(
+                "selected"
+            );
 
-    });
+        }
+    );
 
 
-    button.classList.add("selected");
+    if (button) {
+
+        button.classList.add(
+            "selected"
+        );
+
+    }
 
 
     patientData.duration =
         duration;
-
 }
 
+
+/* =========================================================
+   SAVE QUESTIONS
+========================================================= */
 
 function saveQuestion() {
 
     if (!patientData.duration) {
 
         showMessage(
-            "Please select how long you've had the symptoms."
+            currentLanguage === "Hindi"
+                ? "कृपया symptoms कितने समय से हैं, select करें।"
+                : "Please select how long you've had the symptoms."
         );
 
         return;
     }
 
 
-    const additional =
-        document
-            .getElementById("additionalInfo")
-            .value
-            .trim();
+    const additionalInput =
+        document.getElementById(
+            "additionalInfo"
+        );
 
 
     patientData.additionalInfo =
-        additional;
+
+        additionalInput
+            ? additionalInput.value.trim()
+            : "";
 
 
     showMessage(
-        "Answer recorded."
+        currentLanguage === "Hindi"
+            ? "Answer record हो गया।"
+            : "Answer recorded."
     );
 
 
     nextStep(4);
-
 }
 
 
-/* =========================================
-   STEP 4 — HISTORY
-========================================= */
+/* =========================================================
+   SAVE MEDICAL HISTORY
+========================================================= */
 
 function saveHistory() {
 
+    const historyInput =
+        document.getElementById(
+            "historyInput"
+        );
+
+
+    const medicationsInput =
+        document.getElementById(
+            "medicationsInput"
+        );
+
+
+    const allergiesInput =
+        document.getElementById(
+            "allergiesInput"
+        );
+
+
     patientData.history =
-        document
-            .getElementById("historyInput")
-            .value
-            .trim();
+
+        historyInput
+            ? historyInput.value.trim()
+            : "";
 
 
     patientData.medications =
-        document
-            .getElementById("medicationsInput")
-            .value
-            .trim();
+
+        medicationsInput
+            ? medicationsInput.value.trim()
+            : "";
 
 
     patientData.allergies =
-        document
-            .getElementById("allergiesInput")
-            .value
-            .trim();
+
+        allergiesInput
+            ? allergiesInput.value.trim()
+            : "";
 
 
     showMessage(
-        "Medical history saved."
+        currentLanguage === "Hindi"
+            ? "Medical history save हो गई।"
+            : "Medical history saved."
     );
 
 
     nextStep(5);
-
 }
 
 
-/* =========================================
-   STEP 5 — FILE UPLOAD
-========================================= */
+/* =========================================================
+   FILE INPUT
+========================================================= */
 
-const reportInput =
-    document.getElementById("reportInput");
+function setupReportInput() {
+
+    const reportInput =
+        document.getElementById(
+            "reportInput"
+        );
 
 
-if (reportInput) {
+    if (!reportInput) return;
+
 
     reportInput.addEventListener(
         "change",
         function(event) {
 
-            handleFiles(event.target.files);
+            handleFiles(
+                event.target.files
+            );
 
         }
     );
-
 }
 
 
+/* =========================================================
+   HANDLE FILES
+========================================================= */
+
 function handleFiles(files) {
+
+    if (!files) return;
+
 
     const fileArray =
         Array.from(files);
 
 
-    fileArray.forEach(function(file) {
+    fileArray.forEach(
+        function(file) {
 
-        if (file.size > 10 * 1024 * 1024) {
 
-            showMessage(
-                file.name + " is larger than 10MB."
-            );
+            /* Maximum 10 MB */
 
-            return;
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                showMessage(
+                    file.name +
+                    (
+                        currentLanguage === "Hindi"
+                            ? " 10MB से बड़ी है।"
+                            : " is larger than 10MB."
+                    )
+                );
+
+                return;
+            }
+
+
+            const alreadyExists =
+                patientData.reports.some(
+                    function(existing) {
+
+                        return (
+                            existing.name ===
+                            file.name
+                        );
+
+                    }
+                );
+
+
+            if (!alreadyExists) {
+
+                patientData.reports.push(
+                    file
+                );
+
+            }
 
         }
-
-
-        const alreadyExists =
-            patientData.reports.some(
-                function(existing) {
-
-                    return existing.name === file.name;
-
-                }
-            );
-
-
-        if (!alreadyExists) {
-
-            patientData.reports.push(file);
-
-        }
-
-    });
+    );
 
 
     renderFileList();
-
 }
 
+
+/* =========================================================
+   RENDER FILE LIST
+========================================================= */
 
 function renderFileList() {
 
     const fileList =
-        document.getElementById("fileList");
+        document.getElementById(
+            "fileList"
+        );
 
 
     if (!fileList) return;
 
 
-    fileList.innerHTML = "";
+    fileList.innerHTML =
+        "";
 
 
     patientData.reports.forEach(
         function(file, index) {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "file-item";
@@ -630,7 +978,9 @@ function renderFileList() {
 
                 </div>
 
+
                 <button
+                    type="button"
                     class="file-remove"
                     onclick="removeFile(${index})">
 
@@ -641,13 +991,18 @@ function renderFileList() {
             `;
 
 
-            fileList.appendChild(item);
+            fileList.appendChild(
+                item
+            );
 
         }
     );
-
 }
 
+
+/* =========================================================
+   REMOVE FILE
+========================================================= */
 
 function removeFile(index) {
 
@@ -659,45 +1014,74 @@ function removeFile(index) {
 
     renderFileList();
 
-    showMessage(
-        "File removed."
-    );
 
+    showMessage(
+        currentLanguage === "Hindi"
+            ? "Report remove कर दी गई।"
+            : "File removed."
+    );
 }
 
+
+/* =========================================================
+   SAVE REPORTS
+========================================================= */
 
 function saveReports() {
 
-    showMessage(
+    if (
         patientData.reports.length
-            ? "Reports attached successfully."
-            : "No reports added."
-    );
+    ) {
+
+        showMessage(
+            currentLanguage === "Hindi"
+                ? "Reports successfully attach हो गईं।"
+                : "Reports attached successfully."
+        );
+
+    } else {
+
+        showMessage(
+            currentLanguage === "Hindi"
+                ? "कोई report upload नहीं की गई।"
+                : "No reports added."
+        );
+
+    }
 
 
     nextStep(6);
-
 }
 
+
+/* =========================================================
+   SKIP REPORTS
+========================================================= */
 
 function skipReports() {
 
-    patientData.reports = [];
+    patientData.reports =
+        [];
+
 
     nextStep(6);
-
 }
 
 
-/* =========================================
+/* =========================================================
    DRAG & DROP
-========================================= */
+========================================================= */
 
-const uploadZone =
-    document.getElementById("uploadZone");
+function setupUploadZone() {
+
+    const uploadZone =
+        document.getElementById(
+            "uploadZone"
+        );
 
 
-if (uploadZone) {
+    if (!uploadZone) return;
+
 
     uploadZone.addEventListener(
         "dragover",
@@ -705,7 +1089,9 @@ if (uploadZone) {
 
             event.preventDefault();
 
-            uploadZone.classList.add("dragging");
+            uploadZone.classList.add(
+                "dragging"
+            );
 
         }
     );
@@ -715,7 +1101,9 @@ if (uploadZone) {
         "dragleave",
         function() {
 
-            uploadZone.classList.remove("dragging");
+            uploadZone.classList.remove(
+                "dragging"
+            );
 
         }
     );
@@ -727,122 +1115,674 @@ if (uploadZone) {
 
             event.preventDefault();
 
-            uploadZone.classList.remove("dragging");
 
-            handleFiles(event.dataTransfer.files);
+            uploadZone.classList.remove(
+                "dragging"
+            );
+
+
+            handleFiles(
+                event.dataTransfer.files
+            );
 
         }
     );
-
 }
 
 
-/* =========================================
-   STEP 6 — ASSESSMENT
-========================================= */
+/* =========================================================
+   SYMPTOM EXTRACTION
+   HINDI + ENGLISH
+========================================================= */
 
 function buildSymptoms() {
 
     const originalText =
         patientData.symptoms.trim();
 
+
     if (!originalText) {
-        return ["Symptoms not specified"];
+
+        return [
+            currentLanguage === "Hindi"
+                ? "Symptoms नहीं बताए गए"
+                : "Symptoms not specified"
+        ];
+
     }
 
-    const text =
-        originalText.toLowerCase();
-
-    const knownSymptoms = [
-        "breathing difficulty",
-        "chest pain",
-        "stomach pain",
-        "sore throat",
-        "headache",
-        "fever",
-        "cough",
-        "cold",
-        "fatigue",
-        "weakness",
-        "vomiting",
-        "nausea",
-        "dizziness",
-        "pain",
-        "pain in heart"
-    ];
-
-    const found = [];
-
-    knownSymptoms.forEach(function(symptom) {
-
-        if (text.includes(symptom)) {
-
-            
-
-            if (
-                symptom === "pain" &&
-                (
-                    text.includes("chest pain") ||
-                    text.includes("stomach pain")
-                )
-            ) {
-                return;
-            }
-
-            found.push(
-                capitalize(symptom)
-            );
-        }
-
-    });
-
-   
-
-    if (found.length > 0) {
-        return found;
-    }
-
-  
-
-    return [originalText];
-}
-
-
-function calculatePriority() {
 
     const text =
-        patientData.symptoms
+        originalText
             .toLowerCase();
 
 
+    const symptomMap = [
+
+        /* =========================
+           BREATHING
+        ========================= */
+
+        {
+            keywords: [
+                "breathing difficulty",
+                "difficulty breathing",
+                "shortness of breath",
+                "can't breathe",
+                "cannot breathe",
+                "unable to breathe",
+                "सांस लेने में दिक्कत",
+                "सांस लेने में परेशानी",
+                "सांस नहीं आ रही",
+                "सांस नहीं ले पा रहा",
+                "सांस नहीं ले पा रही",
+                "साँस लेने में दिक्कत",
+                "साँस नहीं आ रही"
+            ],
+
+            label: "Breathing difficulty"
+        },
+
+
+        /* =========================
+           CHEST PAIN
+        ========================= */
+
+        {
+            keywords: [
+                "chest pain",
+                "severe chest pain",
+                "सीने में दर्द",
+                "सीने मे दर्द",
+                "सीने में बहुत दर्द"
+            ],
+
+            label: "Chest pain"
+        },
+
+
+        /* =========================
+           STOMACH PAIN
+        ========================= */
+
+        {
+            keywords: [
+                "stomach pain",
+                "abdominal pain",
+                "severe stomach pain",
+                "पेट दर्द",
+                "पेट में दर्द",
+                "पेट मे दर्द",
+                "बहुत तेज पेट दर्द"
+            ],
+
+            label: "Stomach pain"
+        },
+
+
+        /* =========================
+           HEADACHE
+        ========================= */
+
+        {
+            keywords: [
+                "headache",
+                "head ache",
+                "सिरदर्द",
+                "सिर दर्द",
+                "सर दर्द"
+            ],
+
+            label: "Headache"
+        },
+
+
+        /* =========================
+           FEVER
+        ========================= */
+
+        {
+            keywords: [
+                "fever",
+                "high fever",
+                "persistent fever",
+                "बुखार",
+                "तेज बुखार",
+                "बहुत तेज बुखार"
+            ],
+
+            label: "Fever"
+        },
+
+
+        /* =========================
+           COUGH
+        ========================= */
+
+        {
+            keywords: [
+                "cough",
+                "खांसी",
+                "खाँसी"
+            ],
+
+            label: "Cough"
+        },
+
+
+        /* =========================
+           COLD
+        ========================= */
+
+        {
+            keywords: [
+                "cold",
+                "common cold",
+                "जुकाम",
+                "सर्दी"
+            ],
+
+            label: "Cold"
+        },
+
+
+        /* =========================
+           FATIGUE
+        ========================= */
+
+        {
+            keywords: [
+                "fatigue",
+                "tired",
+                "very tired",
+                "थकान",
+                "बहुत थकान",
+                "थका हुआ",
+                "थकी हुई"
+            ],
+
+            label: "Fatigue"
+        },
+
+
+        /* =========================
+           WEAKNESS
+        ========================= */
+
+        {
+            keywords: [
+                "weakness",
+                "weak",
+                "कमजोरी",
+                "कमज़ोरी",
+                "बहुत कमजोरी"
+            ],
+
+            label: "Weakness"
+        },
+
+
+        /* =========================
+           VOMITING
+        ========================= */
+
+        {
+            keywords: [
+                "vomiting",
+                "vomit",
+                "उल्टी",
+                "उलटियां",
+                "उल्टियां"
+            ],
+
+            label: "Vomiting"
+        },
+
+
+        /* =========================
+           NAUSEA
+        ========================= */
+
+        {
+            keywords: [
+                "nausea",
+                "मतली",
+                "जी मिचलाना"
+            ],
+
+            label: "Nausea"
+        },
+
+
+        /* =========================
+           DIZZINESS
+        ========================= */
+
+        {
+            keywords: [
+                "dizziness",
+                "dizzy",
+                "चक्कर",
+                "चक्कर आना",
+                "सिर घूमना"
+            ],
+
+            label: "Dizziness"
+        },
+
+
+        /* =========================
+           SORE THROAT
+        ========================= */
+
+        {
+            keywords: [
+                "sore throat",
+                "throat pain",
+                "गले में दर्द",
+                "गले का दर्द"
+            ],
+
+            label: "Sore throat"
+        },
+
+
+        /* =========================
+           BLEEDING
+        ========================= */
+
+        {
+            keywords: [
+                "bleeding",
+                "खून बहना",
+                "खून निकलना",
+                "रक्तस्राव"
+            ],
+
+            label: "Bleeding"
+        },
+
+
+        /* =========================
+           SEIZURE
+        ========================= */
+
+        {
+            keywords: [
+                "seizure",
+                "seizures",
+                "convulsion",
+                "दौरा",
+                "दौरे"
+            ],
+
+            label: "Seizure"
+        },
+
+
+        /* =========================
+           FAINTING
+        ========================= */
+
+        {
+            keywords: [
+                "fainted",
+                "fainting",
+                "unconscious",
+                "बेहोश",
+                "बेहोशी",
+                "बेहोश हो गया",
+                "बेहोश हो गई"
+            ],
+
+            label: "Fainting / unconsciousness"
+        }
+
+    ];
+
+
+    const found = [];
+
+
+    symptomMap.forEach(
+        function(symptom) {
+
+            const matched =
+                symptom.keywords.some(
+                    function(keyword) {
+
+                        return text.includes(
+                            keyword
+                        );
+
+                    }
+                );
+
+
+            if (
+                matched &&
+                !found.includes(
+                    symptom.label
+                )
+            ) {
+
+                found.push(
+                    symptom.label
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+       Generic pain should not be added
+       when specific pain already exists.
+    */
+
     if (
-        text.includes("chest pain") ||
-        text.includes("breathing difficulty") ||
-        text.includes("unconscious") ||
-        text.includes("severe bleeding")
+        text.includes("pain") ||
+        text.includes("दर्द")
     ) {
 
-        return "HIGH";
+        const hasSpecificPain =
+            found.includes(
+                "Chest pain"
+            ) ||
+            found.includes(
+                "Stomach pain"
+            );
+
+
+        if (
+            !hasSpecificPain &&
+            !found.includes("Pain")
+        ) {
+
+            found.push(
+                "Pain"
+            );
+
+        }
 
     }
 
 
-    if (
-        text.includes("fever") ||
-        text.includes("vomiting") ||
-        text.includes("severe pain") ||
-        text.includes("dizziness")
-    ) {
+    /*
+       If no known symptom is found,
+       show exactly what patient entered.
+    */
 
-        return "MEDIUM";
+    if (found.length === 0) {
+
+        return [
+            originalText
+        ];
 
     }
 
 
-    return "LOW";
-
+    return found;
 }
 
+
+/* =========================================================
+   PRIORITY CALCULATION
+   HINDI + ENGLISH
+========================================================= */
+
+function calculatePriority() {
+
+    /*
+       Combine all relevant patient information.
+    */
+
+    const text = (
+
+        patientData.symptoms +
+        " " +
+        patientData.additionalInfo +
+        " " +
+        patientData.history
+
+    )
+        .toLowerCase()
+        .trim();
+
+
+    /* =====================================================
+       🔴 HIGH PRIORITY
+    ===================================================== */
+
+    const highPriorityKeywords = [
+
+        /* English */
+
+        "chest pain",
+        "severe chest pain",
+
+        "difficulty breathing",
+        "breathing difficulty",
+        "shortness of breath",
+
+        "can't breathe",
+        "cannot breathe",
+        "unable to breathe",
+
+        "unconscious",
+        "fainted",
+        "fainting",
+        "loss of consciousness",
+
+        "severe bleeding",
+        "heavy bleeding",
+
+        "vomiting blood",
+        "blood in vomit",
+
+        "coughing blood",
+        "cough blood",
+
+        "seizure",
+        "seizures",
+        "convulsion",
+
+        "stroke",
+        "paralysis",
+
+        "severe allergic reaction",
+
+        "severe abdominal pain",
+        "severe stomach pain",
+
+        "very severe pain",
+        "unbearable pain",
+
+        "blue lips",
+        "blue skin",
+
+        "not responding",
+
+        /* Hindi */
+
+        "सीने में दर्द",
+        "सीने मे दर्द",
+        "सीने में बहुत दर्द",
+
+        "सांस लेने में दिक्कत",
+        "सांस लेने में परेशानी",
+
+        "साँस लेने में दिक्कत",
+        "साँस लेने में परेशानी",
+
+        "सांस नहीं आ रही",
+        "साँस नहीं आ रही",
+
+        "सांस नहीं ले पा रहा",
+        "सांस नहीं ले पा रही",
+
+        "बहुत ज्यादा खून",
+        "बहुत ज़्यादा खून",
+
+        "खून बहना",
+        "ज्यादा खून बहना",
+        "ज़्यादा खून बहना",
+
+        "खून की उल्टी",
+
+        "दौरा",
+        "दौरे",
+
+        "लकवा",
+        "पक्षाघात",
+
+        "बेहोश",
+        "बेहोशी",
+
+        "बहुत तेज पेट दर्द",
+        "बहुत तेज़ पेट दर्द",
+
+        "बहुत ज्यादा दर्द",
+        "बहुत ज़्यादा दर्द",
+
+        "असहनीय दर्द"
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < highPriorityKeywords.length;
+        i++
+    ) {
+
+        if (
+            text.includes(
+                highPriorityKeywords[i]
+            )
+        ) {
+
+            return "HIGH";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       🟠 MEDIUM PRIORITY
+    ===================================================== */
+
+    const mediumPriorityKeywords = [
+
+        /* English */
+
+        "fever",
+        "high fever",
+        "persistent fever",
+
+        "headache",
+        "severe headache",
+
+        "cough",
+        "persistent cough",
+
+        "vomiting",
+
+        "nausea",
+
+        "dizziness",
+        "dizzy",
+
+        "weakness",
+        "fatigue",
+
+        "dehydration",
+
+        "stomach pain",
+        "abdominal pain",
+
+        "infection",
+
+        "swelling",
+
+        "moderate pain",
+
+        "sore throat",
+
+        /* Hindi */
+
+        "बुखार",
+        "तेज बुखार",
+        "तेज़ बुखार",
+
+        "सिरदर्द",
+        "सिर दर्द",
+        "सर दर्द",
+
+        "खांसी",
+        "खाँसी",
+
+        "उल्टी",
+        "उलटियां",
+        "उल्टियां",
+
+        "मतली",
+        "जी मिचलाना",
+
+        "चक्कर",
+        "चक्कर आना",
+        "सिर घूमना",
+
+        "कमजोरी",
+        "कमज़ोरी",
+
+        "थकान",
+
+        "पेट दर्द",
+        "पेट में दर्द",
+        "पेट मे दर्द",
+
+        "गले में दर्द",
+
+        "सूजन",
+
+        "संक्रमण"
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < mediumPriorityKeywords.length;
+        i++
+    ) {
+
+        if (
+            text.includes(
+                mediumPriorityKeywords[i]
+            )
+        ) {
+
+            return "MEDIUM";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       🟢 NORMAL PRIORITY
+    ===================================================== */
+
+    return "NORMAL";
+}
+
+
+/* =========================================================
+   RENDER ASSESSMENT
+========================================================= */
 
 function renderAssessment() {
 
@@ -856,14 +1796,21 @@ function renderAssessment() {
         );
 
 
-    container.innerHTML = "";
+    if (!container) return;
+
+
+    container.innerHTML =
+        "";
 
 
     symptoms.forEach(
         function(symptom) {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "symptom-item";
@@ -880,20 +1827,29 @@ function renderAssessment() {
             `;
 
 
-            container.appendChild(item);
+            container.appendChild(
+                item
+            );
 
         }
     );
 
+
+    /*
+       Calculate priority
+    */
 
     patientData.priority =
         calculatePriority();
 
 
     updatePriorityUI();
-
 }
 
+
+/* =========================================================
+   PRIORITY UI
+========================================================= */
 
 function updatePriorityUI() {
 
@@ -919,58 +1875,117 @@ function updatePriorityUI() {
         );
 
 
-    dot.className =
-        "priority-dot " +
-        priority.toLowerCase();
+    if (
+        !dot ||
+        !strong ||
+        !description
+    ) {
+
+        return;
+
+    }
+
+
+    dot.classList.remove(
+        "high",
+        "medium",
+        "normal",
+        "low"
+    );
+
+
+    dot.classList.add(
+        priority.toLowerCase()
+    );
 
 
     strong.innerText =
         priority;
 
 
-    if (priority === "HIGH") {
+    /* HIGH */
+
+    if (
+        priority === "HIGH"
+    ) {
 
         strong.style.color =
-            "#ff6b7a";
+            "#e63946";
+
 
         dot.style.background =
-            "#ff6b7a";
+            "#e63946";
+
 
         description.innerText =
-            "Prompt clinical review recommended.";
 
-    } else if (priority === "MEDIUM") {
+            currentLanguage === "Hindi"
 
-        strong.style.color =
-            "#ffc857";
+                ? "तुरंत clinical review की आवश्यकता हो सकती है।"
 
-        dot.style.background =
-            "#ffc857";
+                : "Prompt clinical review recommended.";
 
-        description.innerText =
-            "Routine medical review recommended.";
 
-    } else {
-
-        strong.style.color =
-            "#48e0a4";
-
-        dot.style.background =
-            "#48e0a4";
-
-        description.innerText =
-            "Non-urgent clinical review recommended.";
-
+        return;
     }
 
+
+    /* MEDIUM */
+
+    if (
+        priority === "MEDIUM"
+    ) {
+
+        strong.style.color =
+            "#f4a261";
+
+
+        dot.style.background =
+            "#f4a261";
+
+
+        description.innerText =
+
+            currentLanguage === "Hindi"
+
+                ? "Medical review recommended."
+
+                : "Routine medical review recommended.";
+
+
+        return;
+    }
+
+
+    /* NORMAL */
+
+    strong.style.color =
+        "#10b981";
+
+
+    dot.style.background =
+        "#10b981";
+
+
+    description.innerText =
+
+        currentLanguage === "Hindi"
+
+            ? "कोई urgent indicator detect नहीं हुआ।"
+
+            : "No urgent indicators detected.";
 }
 
 
-/* =========================================
+/* =========================================================
    GENERATE PATIENT ID
-========================================= */
+========================================================= */
 
 function generatePatientID() {
+
+    patientData.priority =
+        calculatePriority();
+
 
     const random =
         Math.floor(
@@ -988,28 +2003,41 @@ function generatePatientID() {
         `CF-${year}-${random}`;
 
 
-    document.getElementById(
-        "generatedID"
-    ).innerText =
-        patientData.patientID;
+    const generatedID =
+        document.getElementById(
+            "generatedID"
+        );
+
+
+    if (generatedID) {
+
+        generatedID.innerText =
+            patientData.patientID;
+
+    }
 
 
     savePatientData();
 
 
     showMessage(
-        "Patient ID generated successfully."
+
+        currentLanguage === "Hindi"
+
+            ? "Patient ID successfully generate हो गई।"
+
+            : "Patient ID generated successfully."
+
     );
 
 
     nextStep(7);
-
 }
 
 
-/* =========================================
-   SAVE DATA
-========================================= */
+/* =========================================================
+   SAVE PATIENT DATA
+========================================================= */
 
 function savePatientData() {
 
@@ -1038,9 +2066,16 @@ function savePatientData() {
                 function(file) {
 
                     return {
-                        name: file.name,
-                        size: file.size,
-                        type: file.type
+
+                        name:
+                            file.name,
+
+                        size:
+                            file.size,
+
+                        type:
+                            file.type
+
                     };
 
                 }
@@ -1051,6 +2086,9 @@ function savePatientData() {
 
         patientID:
             patientData.patientID,
+
+        language:
+            currentLanguage,
 
         createdAt:
             new Date().toISOString()
@@ -1064,13 +2102,12 @@ function savePatientData() {
             serializableData
         )
     );
-
 }
 
 
-/* =========================================
-   LOAD PATIENT
-========================================= */
+/* =========================================================
+   DOCTOR — LOAD PATIENT
+========================================================= */
 
 function loadPatient() {
 
@@ -1078,6 +2115,9 @@ function loadPatient() {
         document.getElementById(
             "patientID"
         );
+
+
+    if (!input) return;
 
 
     const enteredID =
@@ -1089,11 +2129,16 @@ function loadPatient() {
     if (!enteredID) {
 
         showMessage(
-            "Please enter a Patient ID."
+
+            currentLanguage === "Hindi"
+
+                ? "कृपया Patient ID डालें।"
+
+                : "Please enter a Patient ID."
+
         );
 
         return;
-
     }
 
 
@@ -1106,66 +2151,152 @@ function loadPatient() {
     if (!saved) {
 
         showMessage(
-            "No patient record found."
+
+            currentLanguage === "Hindi"
+
+                ? "Patient record नहीं मिला।"
+
+                : "No patient record found."
+
         );
 
         return;
-
     }
 
 
-    const data =
-        JSON.parse(saved);
+    let data;
+
+
+    try {
+
+        data =
+            JSON.parse(saved);
+
+    } catch (error) {
+
+        showMessage(
+            "Unable to read patient record."
+        );
+
+        return;
+    }
 
 
     if (
+
         enteredID !==
-        data.patientID.toUpperCase()
+
+        String(
+            data.patientID
+        )
+            .toUpperCase()
+
     ) {
 
         showMessage(
-            "Patient not found. Check the ID."
+
+            currentLanguage === "Hindi"
+
+                ? "Patient नहीं मिला। ID check करें।"
+
+                : "Patient not found. Check the ID."
+
         );
 
-        document
-            .getElementById("doctorRecord")
-            .classList.add("hidden");
 
-        document
-            .getElementById("doctorEmpty")
-            .classList.remove("hidden");
+        const doctorRecord =
+            document.getElementById(
+                "doctorRecord"
+            );
+
+
+        const doctorEmpty =
+            document.getElementById(
+                "doctorEmpty"
+            );
+
+
+        if (doctorRecord) {
+
+            doctorRecord.classList.add(
+                "hidden"
+            );
+
+        }
+
+
+        if (doctorEmpty) {
+
+            doctorEmpty.classList.remove(
+                "hidden"
+            );
+
+        }
+
 
         return;
+    }
+
+
+    renderDoctorRecord(
+        data
+    );
+}
+
+
+/* =========================================================
+   DOCTOR RECORD
+========================================================= */
+
+function renderDoctorRecord(data) {
+
+    const doctorEmpty =
+        document.getElementById(
+            "doctorEmpty"
+        );
+
+
+    const doctorRecord =
+        document.getElementById(
+            "doctorRecord"
+        );
+
+
+    if (doctorEmpty) {
+
+        doctorEmpty.classList.add(
+            "hidden"
+        );
 
     }
 
 
-    renderDoctorRecord(data);
+    if (doctorRecord) {
 
-}
+        doctorRecord.classList.remove(
+            "hidden"
+        );
 
-
-/* =========================================
-   DOCTOR RECORD
-========================================= */
-
-function renderDoctorRecord(data) {
-
-    document
-        .getElementById("doctorEmpty")
-        .classList.add("hidden");
+    }
 
 
-    document
-        .getElementById("doctorRecord")
-        .classList.remove("hidden");
+    const doctorPatientID =
+        document.getElementById(
+            "doctorPatientID"
+        );
 
 
-    document.getElementById(
-        "doctorPatientID"
-    ).innerText =
-        data.patientID;
+    if (doctorPatientID) {
 
+        doctorPatientID.innerText =
+            data.patientID;
+
+    }
+
+
+    /* =====================================================
+       SYMPTOMS
+    ===================================================== */
 
     const symptomContainer =
         document.getElementById(
@@ -1173,136 +2304,209 @@ function renderDoctorRecord(data) {
         );
 
 
-    symptomContainer.innerHTML = "";
+    if (symptomContainer) {
+
+        symptomContainer.innerHTML =
+            "";
 
 
-    const symptoms =
-        extractSymptomsFromText(
-            data.symptoms
+        const symptoms =
+            extractSymptomsFromText(
+                data.symptoms
+            );
+
+
+        symptoms.forEach(
+            function(symptom) {
+
+                const element =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                element.className =
+                    "doctor-symptom";
+
+
+                element.innerText =
+                    symptom;
+
+
+                symptomContainer.appendChild(
+                    element
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       HISTORY
+    ===================================================== */
+
+    const doctorHistory =
+        document.getElementById(
+            "doctorHistory"
         );
 
 
-    symptoms.forEach(
-        function(symptom) {
+    if (doctorHistory) {
 
-            const element =
-                document.createElement("div");
+        doctorHistory.innerHTML = `
 
-            element.className =
-                "doctor-symptom";
+            <strong>
+                Existing conditions:
+            </strong>
 
-            element.innerText =
-                symptom;
+            ${escapeHTML(
+                data.history ||
+                "None provided."
+            )}
 
-            symptomContainer.appendChild(
-                element
-            );
-
-        }
-    );
+            <br><br>
 
 
-    document.getElementById(
-        "doctorHistory"
-    ).innerHTML = `
+            <strong>
+                Medications:
+            </strong>
 
-        <strong>
-            Existing conditions:
-        </strong>
+            ${escapeHTML(
+                data.medications ||
+                "None provided."
+            )}
 
-        ${escapeHTML(
-            data.history ||
-            "None provided."
-        )}
+            <br><br>
 
-        <br><br>
 
-        <strong>
-            Medications:
-        </strong>
+            <strong>
+                Allergies:
+            </strong>
 
-        ${escapeHTML(
-            data.medications ||
-            "None provided."
-        )}
+            ${escapeHTML(
+                data.allergies ||
+                "None provided."
+            )}
 
-        <br><br>
+            <br><br>
 
-        <strong>
-            Allergies:
-        </strong>
 
-        ${escapeHTML(
-            data.allergies ||
-            "None provided."
-        )}
+            <strong>
+                Symptom duration:
+            </strong>
 
-        <br><br>
+            ${escapeHTML(
+                data.duration ||
+                "Not specified."
+            )}
 
-        <strong>
-            Symptom duration:
-        </strong>
+        `;
 
-        ${escapeHTML(
-            data.duration ||
-            "Not specified."
-        )}
+    }
 
-    `;
 
+    /* =====================================================
+       REPORTS
+    ===================================================== */
 
     renderDoctorReports(
-        data.reports
+        data.reports || []
     );
 
 
-    document.getElementById(
-        "aiSummary"
-    ).innerHTML = `
+    /* =====================================================
+       AI SUMMARY
+    ===================================================== */
 
-        Patient reports
-        <strong>
-            ${escapeHTML(data.symptoms)}
-        </strong>.
+    const aiSummary =
+        document.getElementById(
+            "aiSummary"
+        );
 
-        Symptoms have been reported for
-        <strong>
-            ${escapeHTML(data.duration || "an unspecified duration")}
-        </strong>.
 
-        Based on the entered information, the
-        preliminary CareFlow priority is
+    if (aiSummary) {
 
-        <strong>
-            ${escapeHTML(data.priority)}
-        </strong>.
+        aiSummary.innerHTML = `
 
-        ${data.additionalInfo
-            ? `
-                Additional information:
-                ${escapeHTML(data.additionalInfo)}
-              `
-            : ""
-        }
+            Patient reports
 
-        The information should be reviewed alongside
-        the patient's history and uploaded documents.
+            <strong>
+                ${escapeHTML(
+                    data.symptoms
+                )}
+            </strong>.
 
-    `;
+            Symptoms have been reported for
+
+            <strong>
+                ${escapeHTML(
+                    data.duration ||
+                    "an unspecified duration"
+                )}
+            </strong>.
+
+            Based on the entered information,
+            the preliminary CareFlow priority is
+
+            <strong>
+                ${escapeHTML(
+                    data.priority ||
+                    "NORMAL"
+                )}
+            </strong>.
+
+            ${
+                data.additionalInfo
+
+                ? `
+
+                    <br><br>
+
+                    <strong>
+                        Additional information:
+                    </strong>
+
+                    ${escapeHTML(
+                        data.additionalInfo
+                    )}
+
+                  `
+
+                : ""
+            }
+
+            <br><br>
+
+            The information should be reviewed
+            alongside the patient's history and
+            uploaded documents.
+
+        `;
+
+    }
 
 
     showMessage(
-        "Patient record loaded successfully."
-    );
 
+        currentLanguage === "Hindi"
+
+            ? "Patient record successfully load हो गया।"
+
+            : "Patient record loaded successfully."
+
+    );
 }
 
 
-/* =========================================
+/* =========================================================
    DOCTOR REPORTS
-========================================= */
+========================================================= */
 
-function renderDoctorReports(reports) {
+function renderDoctorReports(
+    reports
+) {
 
     const container =
         document.getElementById(
@@ -1316,11 +2520,19 @@ function renderDoctorReports(reports) {
         );
 
 
-    container.innerHTML = "";
+    if (!container) return;
 
 
-    count.innerText =
-        reports.length;
+    container.innerHTML =
+        "";
+
+
+    if (count) {
+
+        count.innerText =
+            reports.length;
+
+    }
 
 
     if (!reports.length) {
@@ -1328,13 +2540,21 @@ function renderDoctorReports(reports) {
         container.innerHTML = `
 
             <div class="history-result">
-                No reports uploaded by the patient.
+
+                ${
+                    currentLanguage === "Hindi"
+
+                        ? "Patient ने कोई previous report upload नहीं की।"
+
+                        : "No reports uploaded by the patient."
+
+                }
+
             </div>
 
         `;
 
         return;
-
     }
 
 
@@ -1342,7 +2562,10 @@ function renderDoctorReports(reports) {
         function(report) {
 
             const element =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             element.className =
                 "doctor-report";
@@ -1356,15 +2579,24 @@ function renderDoctorReports(reports) {
                         📎
                     </div>
 
+
                     <span class="doctor-report-name">
-                        ${escapeHTML(report.name)}
+
+                        ${escapeHTML(
+                            report.name
+                        )}
+
                     </span>
 
                 </div>
 
+
                 <button
+                    type="button"
                     class="view-report"
-                    onclick="showMessage('Demo preview: ${escapeHTML(report.name)}')">
+                    onclick="previewReport('${escapeHTML(
+                        report.name
+                    )}')">
 
                     VIEW
 
@@ -1379,13 +2611,30 @@ function renderDoctorReports(reports) {
 
         }
     );
-
 }
 
 
-/* =========================================
-   DECISION
-========================================= */
+/* =========================================================
+   REPORT PREVIEW
+========================================================= */
+
+function previewReport(name) {
+
+    showMessage(
+
+        currentLanguage === "Hindi"
+
+            ? "Demo preview: " + name
+
+            : "Demo preview: " + name
+
+    );
+}
+
+
+/* =========================================================
+   DOCTOR DECISION
+========================================================= */
 
 function selectDecision(
     decision,
@@ -1409,22 +2658,42 @@ function selectDecision(
     );
 
 
-    button.classList.add(
-        "selected"
-    );
+    if (button) {
+
+        button.classList.add(
+            "selected"
+        );
+
+    }
 
 
-    document.getElementById(
-        "selectedDecision"
-    ).innerText =
-        "Selected: " + decision;
+    const selectedDecision =
+        document.getElementById(
+            "selectedDecision"
+        );
+
+
+    if (selectedDecision) {
+
+        selectedDecision.innerText =
+
+            currentLanguage === "Hindi"
+
+                ? "Selected: " + decision
+
+                : "Selected: " + decision;
+
+    }
 
 
     patientData.doctorDecision =
         decision;
-
 }
 
+
+/* =========================================================
+   SAVE DOCTOR DECISION
+========================================================= */
 
 function saveDecision() {
 
@@ -1432,26 +2701,38 @@ function saveDecision() {
         patientData.doctorDecision;
 
 
+    const notesInput =
+        document.getElementById(
+            "doctorNotes"
+        );
+
+
     const notes =
-        document
-            .getElementById("doctorNotes")
-            .value
-            .trim();
+        notesInput
+            ? notesInput.value.trim()
+            : "";
 
 
     if (!decision) {
 
         showMessage(
-            "Please select a clinical decision."
+
+            currentLanguage === "Hindi"
+
+                ? "कृपया clinical decision select करें।"
+
+                : "Please select a clinical decision."
+
         );
 
         return;
-
     }
 
 
     localStorage.setItem(
+
         "careflow_doctor_decision",
+
         JSON.stringify({
 
             decision:
@@ -1464,19 +2745,25 @@ function saveDecision() {
                 new Date().toISOString()
 
         })
+
     );
 
 
     showMessage(
-        "✓ Clinical decision saved successfully."
-    );
 
+        currentLanguage === "Hindi"
+
+            ? "✓ Clinical decision successfully save हो गया।"
+
+            : "✓ Clinical decision saved successfully."
+
+    );
 }
 
 
-/* =========================================
+/* =========================================================
    PREVIOUS VISIT
-========================================= */
+========================================================= */
 
 function showPreviousVisit() {
 
@@ -1489,71 +2776,134 @@ function showPreviousVisit() {
     if (!saved) {
 
         showMessage(
-            "No previous visit found on this device."
+
+            currentLanguage === "Hindi"
+
+                ? "इस device पर कोई previous visit नहीं मिली।"
+
+                : "No previous visit found on this device."
+
         );
 
         return;
-
     }
 
 
-    const data =
-        JSON.parse(saved);
+    let data;
+
+
+    try {
+
+        data =
+            JSON.parse(saved);
+
+    } catch (error) {
+
+        showMessage(
+            "Unable to load previous visit."
+        );
+
+        return;
+    }
 
 
     showDoctor();
 
 
-    document.getElementById(
-        "patientID"
-    ).value =
-        data.patientID;
+    const patientID =
+        document.getElementById(
+            "patientID"
+        );
+
+
+    if (patientID) {
+
+        patientID.value =
+            data.patientID;
+
+    }
 
 
     loadPatient();
-
 }
 
 
-/* =========================================
+/* =========================================================
    COPY PATIENT ID
-========================================= */
+========================================================= */
 
 function copyPatientID() {
 
-    const id =
+    const generatedID =
         document.getElementById(
             "generatedID"
-        ).innerText;
-
-
-    navigator.clipboard
-        .writeText(id)
-        .then(
-            function() {
-
-                showMessage(
-                    "Patient ID copied."
-                );
-
-            }
-        )
-        .catch(
-            function() {
-
-                showMessage(
-                    "Unable to copy automatically."
-                );
-
-            }
         );
 
+
+    if (!generatedID) return;
+
+
+    const id =
+        generatedID.innerText;
+
+
+    if (!id) {
+
+        showMessage(
+            "No Patient ID available."
+        );
+
+        return;
+    }
+
+
+    if (
+
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+
+    ) {
+
+        navigator.clipboard
+            .writeText(id)
+            .then(
+                function() {
+
+                    showMessage(
+
+                        currentLanguage === "Hindi"
+
+                            ? "Patient ID copy हो गई।"
+
+                            : "Patient ID copied."
+
+                    );
+
+                }
+            )
+            .catch(
+                function() {
+
+                    showMessage(
+                        "Unable to copy automatically."
+                    );
+
+                }
+            );
+
+    } else {
+
+        showMessage(
+            "Clipboard is not supported."
+        );
+
+    }
 }
 
 
-/* =========================================
+/* =========================================================
    RESET
-========================================= */
+========================================================= */
 
 function resetAssessment() {
 
@@ -1573,53 +2923,87 @@ function resetAssessment() {
 
         reports: [],
 
-        priority: "MEDIUM",
+        priority: "NORMAL",
 
-        patientID: ""
+        patientID: "",
+
+        doctorDecision: ""
 
     };
 
 
-    document.getElementById(
-        "symptomsInput"
-    ).value = "";
+    const fields = [
 
+        "symptomsInput",
 
-    document.getElementById(
-        "additionalInfo"
-    ).value = "";
+        "additionalInfo",
 
+        "historyInput",
 
-    document.getElementById(
-        "historyInput"
-    ).value = "";
+        "medicationsInput",
 
-
-    document.getElementById(
-        "medicationsInput"
-    ).value = "";
-
-
-    document.getElementById(
         "allergiesInput"
-    ).value = "";
+
+    ];
 
 
-    document.getElementById(
-        "fileList"
-    ).innerHTML = "";
+    fields.forEach(
+        function(id) {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (element) {
+
+                element.value =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    const fileList =
+        document.getElementById(
+            "fileList"
+        );
+
+
+    if (fileList) {
+
+        fileList.innerHTML =
+            "";
+
+    }
+
+
+    const reportInput =
+        document.getElementById(
+            "reportInput"
+        );
+
+
+    if (reportInput) {
+
+        reportInput.value =
+            "";
+
+    }
 
 
     nextStep(1);
 
     showPatient();
-
 }
 
 
-/* =========================================
-   TOAST
-========================================= */
+/* =========================================================
+   TOAST MESSAGE
+========================================================= */
 
 let toastTimeout;
 
@@ -1632,9 +3016,29 @@ function showMessage(text) {
         );
 
 
-    toast.querySelector("p")
-        .innerText =
-        text;
+    if (!toast) {
+
+        console.log(text);
+
+        return;
+    }
+
+
+    const paragraph =
+        toast.querySelector("p");
+
+
+    if (paragraph) {
+
+        paragraph.innerText =
+            text;
+
+    } else {
+
+        toast.innerText =
+            text;
+
+    }
 
 
     toast.classList.add(
@@ -1656,62 +3060,280 @@ function showMessage(text) {
                 );
 
             },
+
             2800
         );
-
 }
 
 
-/* =========================================
-   HELPERS
-========================================= */
+/* =========================================================
+   SYMPTOM EXTRACTION FOR DOCTOR
+========================================================= */
 
-function capitalize(text) {
+function extractSymptomsFromText(
+    text
+) {
 
-    return text.charAt(0).toUpperCase() +
-        text.slice(1);
+    if (!text) {
 
-}
+        return [
+            "Not specified"
+        ];
 
+    }
 
-function extractSymptomsFromText(text) {
 
     const lower =
         text.toLowerCase();
 
 
-    const known = [
+    const symptoms =
+        buildSymptomsFromText(
+            lower,
+            text
+        );
 
-        "headache",
-        "fever",
-        "cough",
-        "cold",
-        "fatigue",
-        "weakness",
-        "vomiting",
-        "nausea",
-        "pain",
-        "dizziness",
-        "breathing difficulty",
-        "chest pain",
-        "stomach pain",
-        "sore throat"
+
+    return symptoms;
+}
+
+
+/* =========================================================
+   SHARED SYMPTOM PARSER
+========================================================= */
+
+function buildSymptomsFromText(
+    lower,
+    original
+) {
+
+    const symptomMap = [
+
+        {
+            keywords: [
+                "breathing difficulty",
+                "difficulty breathing",
+                "shortness of breath",
+                "can't breathe",
+                "cannot breathe",
+                "unable to breathe",
+                "सांस लेने में दिक्कत",
+                "सांस लेने में परेशानी",
+                "सांस नहीं आ रही",
+                "सांस नहीं ले पा रहा",
+                "सांस नहीं ले पा रही",
+                "साँस लेने में दिक्कत",
+                "साँस नहीं आ रही"
+            ],
+
+            label: "Breathing difficulty"
+        },
+
+
+        {
+            keywords: [
+                "chest pain",
+                "severe chest pain",
+                "सीने में दर्द",
+                "सीने मे दर्द",
+                "सीने में बहुत दर्द"
+            ],
+
+            label: "Chest pain"
+        },
+
+
+        {
+            keywords: [
+                "stomach pain",
+                "abdominal pain",
+                "severe stomach pain",
+                "पेट दर्द",
+                "पेट में दर्द",
+                "पेट मे दर्द",
+                "बहुत तेज पेट दर्द"
+            ],
+
+            label: "Stomach pain"
+        },
+
+
+        {
+            keywords: [
+                "headache",
+                "head ache",
+                "सिरदर्द",
+                "सिर दर्द",
+                "सर दर्द"
+            ],
+
+            label: "Headache"
+        },
+
+
+        {
+            keywords: [
+                "fever",
+                "high fever",
+                "बुखार",
+                "तेज बुखार",
+                "तेज़ बुखार"
+            ],
+
+            label: "Fever"
+        },
+
+
+        {
+            keywords: [
+                "cough",
+                "खांसी",
+                "खाँसी"
+            ],
+
+            label: "Cough"
+        },
+
+
+        {
+            keywords: [
+                "cold",
+                "common cold",
+                "जुकाम",
+                "सर्दी"
+            ],
+
+            label: "Cold"
+        },
+
+
+        {
+            keywords: [
+                "fatigue",
+                "tired",
+                "थकान",
+                "बहुत थकान"
+            ],
+
+            label: "Fatigue"
+        },
+
+
+        {
+            keywords: [
+                "weakness",
+                "weak",
+                "कमजोरी",
+                "कमज़ोरी"
+            ],
+
+            label: "Weakness"
+        },
+
+
+        {
+            keywords: [
+                "vomiting",
+                "vomit",
+                "उल्टी",
+                "उलटियां",
+                "उल्टियां"
+            ],
+
+            label: "Vomiting"
+        },
+
+
+        {
+            keywords: [
+                "nausea",
+                "मतली",
+                "जी मिचलाना"
+            ],
+
+            label: "Nausea"
+        },
+
+
+        {
+            keywords: [
+                "dizziness",
+                "dizzy",
+                "चक्कर",
+                "चक्कर आना",
+                "सिर घूमना"
+            ],
+
+            label: "Dizziness"
+        },
+
+
+        {
+            keywords: [
+                "sore throat",
+                "throat pain",
+                "गले में दर्द"
+            ],
+
+            label: "Sore throat"
+        },
+
+
+        {
+            keywords: [
+                "seizure",
+                "seizures",
+                "convulsion",
+                "दौरा",
+                "दौरे"
+            ],
+
+            label: "Seizure"
+        },
+
+
+        {
+            keywords: [
+                "fainted",
+                "fainting",
+                "unconscious",
+                "बेहोश",
+                "बेहोशी"
+            ],
+
+            label: "Fainting / unconsciousness"
+        }
 
     ];
 
 
-    const result = [];
+    const found = [];
 
 
-    known.forEach(
-        function(symptom) {
+    symptomMap.forEach(
+        function(item) {
+
+            const matched =
+                item.keywords.some(
+                    function(keyword) {
+
+                        return lower.includes(
+                            keyword
+                        );
+
+                    }
+                );
+
 
             if (
-                lower.includes(symptom)
+                matched &&
+                !found.includes(
+                    item.label
+                )
             ) {
 
-                result.push(
-                    capitalize(symptom)
+                found.push(
+                    item.label
                 );
 
             }
@@ -1720,24 +3342,29 @@ function extractSymptomsFromText(text) {
     );
 
 
-    if (!result.length) {
+    if (!found.length) {
 
-        result.push(
-            text || "Not specified"
-        );
+        return [
+            original
+        ];
 
     }
 
 
-    return result;
-
+    return found;
 }
 
 
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
 function escapeHTML(text) {
 
-    if (text === undefined ||
-        text === null) {
+    if (
+        text === undefined ||
+        text === null
+    ) {
 
         return "";
 
@@ -1770,17 +3397,20 @@ function escapeHTML(text) {
             /'/g,
             "&#039;"
         );
-
 }
 
 
-/* =========================================
+/* =========================================================
    INITIALIZE
-========================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
+
+        setupReportInput();
+
+        setupUploadZone();
 
         showPatient();
 
