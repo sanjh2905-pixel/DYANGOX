@@ -19,10 +19,10 @@
 
     --cyan: #06B6D4;
     --cyan-dark: #0891B2;
-    --cyan-light: #CFFAFE;
+    --cyan-light: #63b2b9;
 
     --mint: #ECFDF5;
-    --mint-2: #D1FAE5;
+    --mint-2: #71d09f;
 
     --background: #F4FBF9;
     --white: #FFFFFF;
@@ -154,7 +154,7 @@ a {
     right: -120px;
 
     background:
-        rgba(6, 182, 212, 0.16);
+        rgba(5, 156, 183, 0.675);
 }
 
 .orb-two {
@@ -163,7 +163,7 @@ a {
     left: -150px;
 
     background:
-        rgba(16, 185, 129, 0.16);
+        rgba(9, 185, 126, 0.812);
 }
 
 
